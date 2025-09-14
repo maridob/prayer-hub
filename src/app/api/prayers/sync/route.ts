@@ -62,6 +62,20 @@ export async function POST(request: NextRequest) {
       existingPrayers.map(p => `${p.content}|${p.petitioner || ''}`)
     )
 
+    // Ensure user exists or create one
+    const existingUser = await prisma.user.findUnique({ where: { id: session.user.id } });
+    if (!existingUser) {
+      // Create user if doesn't exist
+      await prisma.user.create({
+        data: {
+          id: session.user.id,
+          email: session.user.email || 'user@example.com',
+          name: session.user.name || 'User',
+          password: 'placeholder' // This shouldn't be used since we're using session auth
+        }
+      });
+    }
+
     // Process prayers in batches to avoid overwhelming the database
     const BATCH_SIZE = 10
     for (let i = 0; i < googleSheetsPrayers.length; i += BATCH_SIZE) {
