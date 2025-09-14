@@ -63,13 +63,18 @@ model VerificationToken {
 }
 
 model Prayer {
-  id          String   @id @default(cuid())
-  title       String
-  content     String
-  isAnswered  Boolean  @default(false)
-  isPrivate   Boolean  @default(false)
-  userId      String
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id                     String   @id @default(cuid())
+  title                  String
+  content                String
+  isAnswered             Boolean  @default(false)
+  isPrivate              Boolean  @default(false)
+  isContactPetitioner    String?
+  petitioner             String?
+  petitionerContactEmail String?
+  petitionerContactPhone String?
+  hosannaLocation        String?
+  userId                 String
+  user                   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
 }
